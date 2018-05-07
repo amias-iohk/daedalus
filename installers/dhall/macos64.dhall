@@ -19,7 +19,8 @@ in
   , nodeLogPath         = "${dataDir}/Logs/cardano-node.log"
 
   , walletPath          = "./Frontend"
-  , walletLogging       = False
+  , walletLogging       = True
+  , frontendOnlyMode    = True
 
   , updaterPath         = "/usr/bin/open"
   , updaterArgs         = ["-FW"]

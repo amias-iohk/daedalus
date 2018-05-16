@@ -20,6 +20,25 @@ let
     daedalus-installer = self.callPackage ./installers/default.nix {};
     daedalus = self.callPackage ./installers/nix/linux.nix {};
     rawapp = self.callPackage ./yarn2nix.nix { api = "ada"; };
+    source = ./.;
+    flow = pkgs.flow.overrideAttrs (drv: {
+      src = pkgs.fetchFromGitHub {
+        owner = "facebook";
+        repo = "flow";
+        rev = "v0.60.1";
+        sha256 = "1bi0m42qkdlljkk4lh85y8ncrn8im6mbn291b3305lf4pm0x59kd";
+      };
+    });
+    tests = {
+      runFlow = pkgs.callPackage ./tests/flow.nix {
+        flow = self.flow;
+        source = self.source;
+      };
+      runLint = pkgs.callPackage ./tests/lint.nix {
+        eslint = pkgs.nodePackages.eslint;
+        source = self.source;
+      };
+    };
     nix-bundle = import (pkgs.fetchFromGitHub {
       owner = "matthewbauer";
       repo = "nix-bundle";
